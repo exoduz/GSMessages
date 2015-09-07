@@ -64,6 +64,7 @@ extension UIView {
 public class GSMessage {
     
     public static var font: UIFont = UIFont.systemFontOfSize(14)
+    public static var textAlignment: NSTextAlignment = NSTextAlignment.Center
     public static var successBackgroundColor: UIColor = UIColor(red: 142.0/255, green: 183.0/255, blue: 64.0/255, alpha: 0.95)
     public static var warningBackgroundColor: UIColor = UIColor(red: 230.0/255, green: 189.0/255, blue: 1.0/255, alpha: 0.95)
     public static var errorBackgroundColor: UIColor = UIColor(red: 219.0/255, green: 36.0/255, blue: 27.0/255, alpha: 0.70)
@@ -178,10 +179,10 @@ public class GSMessage {
         switch position {
         case .Top:
             if let inViewController = inViewController {
-                var navigation = inViewController.navigationController ?? (inViewController as? UINavigationController)
-                var navigationBarHidden = (navigation?.navigationBarHidden ?? true)
-                var navigationBarTranslucent = (navigation?.navigationBar.translucent ?? false)
-                var statusBarHidden = UIApplication.sharedApplication().statusBarHidden
+                let navigation = inViewController.navigationController ?? (inViewController as? UINavigationController)
+                let navigationBarHidden = (navigation?.navigationBarHidden ?? true)
+                let navigationBarTranslucent = (navigation?.navigationBar.translucent ?? false)
+                let statusBarHidden = UIApplication.sharedApplication().statusBarHidden
                 if !navigationBarHidden && navigationBarTranslucent && !statusBarHidden { offsetY+=20 }
                 if !navigationBarHidden && navigationBarTranslucent { offsetY+=44; }
                 if (navigationBarHidden && !statusBarHidden) { offsetY+=20 }
@@ -197,7 +198,7 @@ public class GSMessage {
         messageText.text = text
         messageText.font = GSMessage.font
         messageText.textColor = textColor
-        messageText.textAlignment = .Center
+        messageText.textAlignment = GSMessage.textAlignment
         message.addSubview(messageText)
         
         if hideOnTap { message.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "handleTap:")) }
@@ -220,12 +221,12 @@ extension UIView {
     
     private var installedMessage: GSMessage? {
         get { return objc_getAssociatedObject(self, &installedMessageKey) as? GSMessage }
-        set { objc_setAssociatedObject(self, &installedMessageKey, newValue, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC)) }
+        set { objc_setAssociatedObject(self, &installedMessageKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
     private var uninstallMessage: GSMessage? {
         get { return objc_getAssociatedObject(self, &uninstallMessageKey) as? GSMessage }
-        set { objc_setAssociatedObject(self, &uninstallMessageKey, newValue, UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC)) }
+        set { objc_setAssociatedObject(self, &uninstallMessageKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
 }
